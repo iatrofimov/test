@@ -1,0 +1,100 @@
+from flask import Flask, jsonify, request
+
+app = Flask(__name__)
+
+# Пример данных пользователей и постов
+users = [
+    {"id": 1, "name": "John", "email": "john@example.com"},
+    {"id": 2, "name": "Jane", "email": "jane@example.com"}
+]
+
+posts = [
+    {"id": 1, "title": "First Post", "content": "Hello, world!", "user_id": 1},
+    {"id": 2, "title": "Second Post", "content": "Flask is awesome!", "user_id": 2}
+]
+
+# Маршрут для создания пользователя
+@app.route('/users', methods=['POST'])
+def create_user():
+    new_user = request.get_json()
+    users.append(new_user)
+    return jsonify(new_user), 201
+
+# Маршрут для чтения пользователя
+@app.route('/users/<int:user_id>', methods=['GET'])
+def get_user(user_id):
+    for user in users:
+        if user['id'] == user_id:
+            return jsonify(user)
+    return jsonify({'error': 'User not found'}), 404
+
+# Маршрут для изменения пользователя
+@app.route('/users/<int:user_id>', methods=['PUT'])
+def update_user(user_id):
+    updated_user = request.get_json()
+    for user in users:
+        if user['id'] == user_id:
+            user.update(updated_user)
+            return jsonify(user)
+    return jsonify({'error': 'User not found'}), 404
+
+# Маршрут для удаления пользователя
+@app.route('/users/<int:user_id>', methods=['DELETE'])
+def delete_user(user_id):
+    for user in users:
+        if user['id'] == user_id:
+            users.remove(user)
+            return jsonify({'message': 'User deleted'})
+    return jsonify({'error': 'User not found'}), 404
+
+# Маршрут для создания поста
+@app.route('/posts', methods=['POST'])
+def create_post():
+    new_post = request.get_json()
+    posts.append(new_post)
+    return jsonify(new_post), 201
+
+# Маршрут для чтения поста
+@app.route('/posts/<int:post_id>', methods=['GET'])
+def get_post(post_id):
+    for post in posts:
+        if post['id'] == post_id:
+            return jsonify(post)
+    return jsonify({'error': 'Post not found'}), 404
+
+# Маршрут для изменения поста
+@app.route('/posts/<int:post_id>', methods=['PUT'])
+def update_post(post_id):
+    updated_post = request.get_json()
+    for post in posts:
+        if post['id'] == post_id:
+            post.update(updated_post)
+            return jsonify(post)
+    return jsonify({'error': 'Post not found'}), 404
+
+# Маршрут для удаления поста
+@app.route('/posts/<int:post_id>', methods=['DELETE'])
+def delete_post(post_id):
+    for post in posts:
+        if post['id'] == post_id:
+            posts.remove(post)
+            return jsonify({'message': 'Post deleted'})
+    return jsonify({'error': 'Post not found'}), 404
+
+if __name__ == '__main__':
+    app.run()
+from flask import Flask
+
+def create_app():
+    app = Flask(__name__)
+
+    # Здесь вы можете добавить маршруты и другую конфигурацию вашего приложения
+
+    return app
+
+if __name__ == '__main__':
+    app = create_app()
+    app.run()
+
+
+#%%
